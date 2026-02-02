@@ -1,0 +1,13 @@
+# Environment
+.env
+
+# Deno
+deno.lock
+
+# Frontend build
+frontend/dist/
+frontend/node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
