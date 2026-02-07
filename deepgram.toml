@@ -4,9 +4,10 @@ description = "Get started using Deepgram's Live Transcription with this Deno de
 author = "Deepgram DX Team <devrel@deepgram.com> (https://developers.deepgram.com)"
 repository = "https://github.com/deepgram-starters/deno-live-transcription"
 useCase = "live-transcription"
-language = "TypeScript"
-framework = "Deno"
+language = "typescript"
+framework = "deno"
 sdk = "N/A"
+tags = ["live-transcription", "live-stt", "real-time-transcription", "real-time-asr", "streaming-transcription", "live-speech-to-text", "typescript", "deno"]
 
 [install.pre]
 command = "git submodule update --init --recursive"
