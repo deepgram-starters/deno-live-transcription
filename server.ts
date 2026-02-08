@@ -5,10 +5,8 @@
  * by proxying audio streams between the client and Deepgram's Live API.
  *
  * Key Features:
- * - WebSocket endpoint: /listen
+ * - WebSocket endpoint: /api/live-transcription
  * - Bidirectional audio/transcription streaming
- * - Proxies to Vite dev server in development
- * - Serves static frontend in production
  * - Native TypeScript support
  * - No external web framework needed
  */
@@ -41,13 +39,11 @@ const DEEPGRAM_WS_URL = "wss://api.deepgram.com/v1/listen";
 interface ServerConfig {
   port: number;
   host: string;
-  frontendPort: number;
 }
 
 const config: ServerConfig = {
   port: parseInt(Deno.env.get("PORT") || "8081"),
   host: Deno.env.get("HOST") || "0.0.0.0",
-  frontendPort: parseInt(Deno.env.get("FRONTEND_PORT") || "8080"),
 };
 
 // ============================================================================
@@ -85,10 +81,9 @@ const apiKey = loadApiKey();
  */
 function getCorsHeaders(): HeadersInit {
   return {
-    "Access-Control-Allow-Origin": `http://localhost:${config.frontendPort}`,
+    "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Credentials": "true",
   };
 }
 
@@ -298,8 +293,8 @@ async function handleRequest(req: Request): Promise<Response> {
     return handlePreflight();
   }
 
-  // WebSocket endpoint: /stt/stream
-  if (url.pathname === "/stt/stream") {
+  // WebSocket endpoint: /api/live-transcription
+  if (url.pathname === "/api/live-transcription") {
     const upgrade = req.headers.get("upgrade") || "";
 
     if (upgrade.toLowerCase() !== "websocket") {
@@ -333,8 +328,7 @@ async function handleRequest(req: Request): Promise<Response> {
 
 console.log("\n" + "=".repeat(70));
 console.log(`🚀 Backend API Server running at http://localhost:${config.port}`);
-console.log(`📡 CORS enabled for http://localhost:${config.frontendPort}`);
-console.log(`\n💡 Frontend should be running on http://localhost:${config.frontendPort}`);
+console.log(`📡 CORS enabled for wildcard origin`);
 console.log("=".repeat(70) + "\n");
 
 Deno.serve({ port: config.port, hostname: config.host }, handleRequest);
